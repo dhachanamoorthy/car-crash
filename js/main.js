@@ -1,8 +1,10 @@
 $( document ).ready(function() {
-    var speed=4000;
-    var spawnSpeed=1000;
+    var speed=2000;
+    var spawnSpeed=750;
     var spawner;
+    var t_score=0;
     var score=0;
+    var car=$('#myCar');
     var scoreTimer;
     var scoreCard=$('.score-card');
     var vehiles=['blue.jpeg','red.jpeg','white.jpeg','green.jpeg','yellow.jpeg','gray.jpeg','ambulance.jpeg','fire.jpeg','truck.jpeg','police.jpeg'];
@@ -18,18 +20,37 @@ $( document ).ready(function() {
     function scoreBoard(){
         scoreTimer=setInterval(function(){
             score++;
-            scoreCard.html(score+"-"+speed);
-            if(score==500){
-                speed=speed-1000;
+            t_score++;
+            scoreCard.html("score:"+score);
+            if(t_score==500){
+                speed=speed-750;
                 spawnSpeed=spawnSpeed-250;
             }
-            else if(score==1000){
-                speed=speed-1000;
-                spawnSpeed=spawnSpeed-100;
+            if(t_score>500 && t_score<550){
+                $('.track-dark').toggleClass('track-light');
+                scoreCard.html(score+"-"+speed+'>');
             }
-            else if(score==2000){
-                speed=speed-1000;
-                spawnSpeed=spawnSpeed-100;
+            if(t_score>1000 && t_score<1050){
+                $('.track-dark').toggleClass('track-light');
+            }
+            if(t_score>550){
+                $('.track').removeClass('track-light');
+                $('.track').addClass('track-dark');
+            }
+            if(t_score==500){
+                speed=speed-250;
+                spawnSpeed=spawnSpeed-200;
+            }
+            else if(t_score==1000){
+                speed=speed-500;
+                spawnSpeed=spawnSpeed-200;
+            }
+            else if(t_score>1050){
+                $('.track').removeClass('track-light');
+                $('.track').addClass('track-dark');
+                speed=2000;
+                spawnSpeed=750;
+                t_score=0;
             }
         },100);
         
@@ -40,6 +61,7 @@ $( document ).ready(function() {
         var objPath=getVehicle();
         $(vehicleObject).attr('id','controller');
         $(vehicleObject).attr('src',objPath);
+        
         var track="#t-"+getTrack();
         $(track).append(vehicleObject);
         move(vehicleObject);
@@ -53,9 +75,10 @@ $( document ).ready(function() {
             var myCar=$("#myCar");
             var hit=overlaps(target,myCar);
             if(hit){
-                alert("crashed");
+                alert("crashed\nyour score : "+score);
+                reset();
             }
-        },100);
+        },0.1);
     }
     var overlaps = (function () {
         function getPositions( elem ) {
@@ -119,6 +142,14 @@ $( document ).ready(function() {
             $(myCar).remove();
             $(newTrack).append(myCar);
         }
+    }
+    function reset(){
+        score=0;
+        speed=2000;
+        spawnSpeed=750;
+        t_score=0;
+        $('.track').empty();
+        $('#t-2').append(car);
     }
     spawnTimer();
     scoreBoard();
