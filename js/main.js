@@ -4,15 +4,10 @@ $( document ).ready(function() {
     var spawner;
     var t_score=0;
     var score=0;
-    var car=$('#myCar');
     var scoreTimer;
+    var dummy=$('.dummy');
+    var randomObj=dummy;
     var scoreCard=$('.score-card');
-    var vehiles=['blue.jpeg','red.jpeg','white.jpeg','green.jpeg','yellow.jpeg','gray.jpeg','ambulance.jpeg','fire.jpeg','truck.jpeg','police.jpeg'];
-    function getVehicle(){
-        var randomVehicleIndex=Math.floor(Math.random()*10);
-        randomVehicle=vehiles[randomVehicleIndex];
-        return "images/"+randomVehicle;
-    }
     function getTrack(){
         var randomTrack=Math.floor(Math.random()*3)+1;
         return randomTrack;
@@ -53,15 +48,12 @@ $( document ).ready(function() {
                 t_score=0;
             }
         },100);
-        
-
     }
     function spawnToTrack(){
         var vehicleObject=document.createElement('img');
-        var objPath=getVehicle();
+        var objPath='images/blue.jpeg';
         $(vehicleObject).attr('id','controller');
         $(vehicleObject).attr('src',objPath);
-        
         var track="#t-"+getTrack();
         $(track).append(vehicleObject);
         move(vehicleObject);
@@ -73,7 +65,7 @@ $( document ).ready(function() {
         setInterval(function(){
             var target=$(obj);
             var myCar=$("#myCar");
-            var hit=overlaps(target,myCar);
+            var hit=overlaps(target,randomObj);
             if(hit){
                 alert("crashed\nyour score : "+score);
                 reset();
@@ -101,7 +93,7 @@ $( document ).ready(function() {
             r2 = p1[0] < p2[0] ? p2 : p1;
             return r1[1] > r2[0] || r1[0] === r2[0];
         }
-    
+        
         return function ( a, b ) {
             var pos1 = getPositions( a ),
                 pos2 = getPositionMyCar( b );
@@ -115,16 +107,59 @@ $( document ).ready(function() {
     function spawnTimer(){
        spawner= setInterval(function(){ spawnToTrack() },spawnSpeed);
     }
-    function pausePlay(){
-        var count=0;
-        $("#controller").dequeue();
-        $("#controller").each(function(){
-            count++;
-        });
-        clearInterval(spawner);
+    $('#t-1').click(function(){
+        var vehicleObject=document.createElement('img');
+        var objPath='images/red.jpeg';
+        $(vehicleObject).attr('id','controller');
+        $(vehicleObject).attr('src',objPath);
+        var track="#t-1";
+        $(track).append(vehicleObject);
+        moveUp(vehicleObject);
+    });
+    $('#t-2').click(function(){
+        var vehicleObject=document.createElement('img');
+        var objPath='images/red.jpeg';
+        $(vehicleObject).attr('id','controller');
+        $(vehicleObject).attr('src',objPath);
+        var track="#t-2";
+        $(track).append(vehicleObject);
+        moveUp(vehicleObject);
+    });
+    $('#t-3').click(function(){
+        var vehicleObject=document.createElement('img');
+        var objPath='images/red.jpeg';
+        $(vehicleObject).attr('id','controller');
+        $(vehicleObject).attr('src',objPath);
+        var track="#t-3";
+        $(track).append(vehicleObject);
+        moveUp(vehicleObject);
+    });
+    function moveUp(obj){
+        $(obj).offset({top:700});
+        randomObj=$(obj);
+        var t_offset=700;
+        var moveUpTimer=setInterval(function(){
+            t_offset--;
+            $(obj).offset({top:t_offset});
+            if(t_offset==-10){
+                randomObj=dummy;
+                $(obj).remove();
+                clearInterval(moveUpTimer);
+            }
+        },10);
+        // alert($(obj).offset().left+","+$(obj).offset().top);
 
+        
+        // setInterval(function(){
+        //     var target=$(obj);
+        //     var myCar=$("#controller");
+        //     var hit=overlaps(target,myCar);
+        //     if(hit){
+        //         alert("crashed\nyour score : "+score);
+        //         reset();
+        //     }
+        // },0.1);
     }
-
     function changeTrack(direction){
         var myCar=$("#myCar");
         var currentTrack=myCar.parent();
@@ -148,8 +183,8 @@ $( document ).ready(function() {
         speed=2000;
         spawnSpeed=750;
         t_score=0;
+        randomObj=dummy;
         $('.track').empty();
-        $('#t-2').append(car);
     }
     spawnTimer();
     scoreBoard();
