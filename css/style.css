@@ -1,0 +1,35 @@
+.container{
+    position:fixed;
+    width: 100%;
+    height: 100%;
+    border: 2px solid gray;
+    padding:10px;
+}
+.track-container{
+    width:360px;
+    height: 700px;
+    margin:auto;
+    border: 2px solid black;
+}
+.track{
+    width:116px;
+    height: 100%;
+    border-right: 1px solid grey;
+    background-color: black;
+    display: inline-block;
+}
+.track img{
+    width: 30px;
+    height: 60px;
+    margin:0px 37px;
+    position: absolute;
+}
+#myCar{
+    position: absolute;
+    bottom: 25px;
+}
+.score-card{
+    position: absolute;
+    color:white;
+    z-index: 999;
+}
